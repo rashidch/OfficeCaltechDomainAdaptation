@@ -50,6 +50,14 @@ def adaptData(algo, Sx, Sy, Tx, Ty):
         Xa = XS.dot(np.transpose(XS)).dot(XT)  # align source subspace
         sourceAdapted = Sx.dot(Xa)  # project source in aligned subspace
         targetAdapted = Tx.dot(XT)  # project target in target subspace
+    if algo == "OT":
+        # Optimal Transport with class regularization described in:
+        # Domain adaptation with regularized optimal transport, 2014.
+        # Courty et al.
+        import ot  # https://github.com/rflamary/POT
+        transp3 = ot.da.SinkhornLpl1Transport(reg_e=2, reg_cl=1, norm="median")
+        transp3.fit(Xs=Sx, ys=Sy, Xt=Tx)
+        return (transp3.transform(Xs=Sx), Tx)
 
     return sourceAdapted, targetAdapted
 
