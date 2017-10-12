@@ -57,7 +57,8 @@ def adaptData(algo, Sx, Sy, Tx, Ty):
         import ot  # https://github.com/rflamary/POT
         transp3 = ot.da.SinkhornLpl1Transport(reg_e=2, reg_cl=1, norm="median")
         transp3.fit(Xs=Sx, ys=Sy, Xt=Tx)
-        return (transp3.transform(Xs=Sx), Tx)
+        sourceAdapted = transp3.transform(Xs=Sx)
+        targetAdapted = Tx
 
     return sourceAdapted, targetAdapted
 
